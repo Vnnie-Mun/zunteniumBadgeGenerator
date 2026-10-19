@@ -4,220 +4,111 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zuntenium Badge Generator</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        font-family: 'Segoe UI', Inter, system-ui, -apple-system, sans-serif;
-      }
-      body {
-        margin: 0;
-        background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 50%, #F3F4F6 100%);
-        color: #1F2937;
-        min-height: 100vh;
-      }
-      * { box-sizing: border-box; }
-      .app { min-height: 100vh; padding: 20px; }
-      .topbar {
-        display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
-        margin-bottom: 28px; padding: 20px 24px; border-bottom: 1.5px solid rgba(74, 123, 167, 0.15);
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      }
-      .brand { display: flex; align-items: center; gap: 14px; }
-      .brand-logo {
-        width: 52px; height: 52px; min-width: 52px;
-        filter: drop-shadow(0 4px 12px rgba(30, 58, 95, 0.15));
-      }
-      .layout { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 24px; }
-      .panel {
-        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.9) 100%);
-        border: 1px solid rgba(74, 123, 167, 0.12);
-        border-radius: 20px; padding: 24px; 
-        box-shadow: 0 10px 40px rgba(30,58,95,0.08), inset 0 1px 0 rgba(74,123,167,0.08);
-        backdrop-filter: blur(20px);
-      }
-      .label { 
-        display: block; margin-bottom: 10px; color: #1E3A5F; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;
-      }
-      .input, .textarea {
-        width: 100%; border-radius: 12px; border: 1px solid rgba(74, 123, 167, 0.15);
-        background: rgba(248,249,250,0.8); color: #1F2937; padding: 11px 14px; font-size: 0.95rem;
-        transition: all 0.2s ease;
-      }
-      .input:focus, .textarea:focus { 
-        outline: none; border-color: #4A7BA7; background: rgba(74,123,167,0.05);
-        box-shadow: 0 0 0 3px rgba(74,123,167,0.1); 
-      }
-      .textarea { resize: vertical; min-height: 90px; font-family: inherit; }
-      .chip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-      .chip, .layout-chip {
-        border: 1.5px solid rgba(74, 123, 167, 0.15); border-radius: 12px; background: rgba(248,249,250,0.6);
-        color: #4A7BA7; padding: 11px 12px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
-        transition: all 0.2s ease;
-      }
-      .chip:hover, .layout-chip:hover {
-        border-color: rgba(74, 123, 167, 0.4);
-        background: rgba(74,123,167,0.08);
-        transform: translateY(-1px);
-      }
-      .chip.active, .layout-chip.active { 
-        border-color: #1E3A5F; background: rgba(30,58,95,0.12); color: #1E3A5F;
-        box-shadow: 0 0 16px rgba(30,58,95,0.15);
-      }
-      .dropzone {
-        border: 2px dashed rgba(74, 123, 167, 0.25); border-radius: 16px; padding: 24px; text-align: center;
-        cursor: pointer; background: rgba(74,123,167,0.02);
-        transition: all 0.2s ease;
-      }
-      .dropzone:hover {
-        border-color: rgba(74, 123, 167, 0.4);
-        background: rgba(74,123,167,0.06);
-      }
-      .dropzone.active { border-color: #1E3A5F; background: rgba(30,58,95,0.08); }
-      .button {
-        width: 100%; border: none; border-radius: 12px; padding: 13px 16px; font-weight: 700; cursor: pointer;
-        color: #FFFFFF; background: linear-gradient(135deg, #1E3A5F, #4A7BA7);
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 24px rgba(30, 58, 95, 0.25);
-      }
-      .button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 32px rgba(30, 58, 95, 0.35);
-      }
-      .button:active {
-        transform: translateY(0);
-      }
-      .button.secondary { 
-        background: rgba(74,123,167,0.08); color: #1E3A5F; border: 1px solid rgba(74,123,167,0.2);
-        box-shadow: 0 4px 12px rgba(30,58,95,0.08);
-      }
-      .button.secondary:hover {
-        background: rgba(74,123,167,0.15);
-        border-color: rgba(30, 58, 95, 0.3);
-      }
-      .preview-panel { display: flex; flex-direction: column; gap: 16px; }
-      canvas { 
-        width: 100%; max-width: 900px; height: auto; border-radius: 24px; background: #FFFFFF; 
-        box-shadow: 0 20px 60px rgba(30,58,95,0.15), 0 0 40px rgba(74,123,167,0.1);
-        border: 1px solid rgba(74, 123, 167, 0.12);
-      }
-      .meta { color: #6B7280; font-size: 0.9rem; }
-      .section-title {
-        font-size: 0.85rem; font-weight: 700; color: #1E3A5F; text-transform: uppercase; letter-spacing: 0.08em;
-        margin-bottom: 16px; padding-top: 4px;
-      }
-      @media (max-width: 900px) {
-        .layout { grid-template-columns: 1fr; }
-        .topbar { flex-direction: column; text-align: center; }
-      }
-    </style>
+    <meta name="description" content="Generate official Zuntenium contributor badges for Square, Story, and LinkedIn." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
     <div class="app">
-      <div class="topbar">
+      <header class="topbar">
         <div class="brand">
-          <svg class="brand-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#1E3A5F;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#4A7BA7;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <rect width="120" height="120" rx="28" ry="28" fill="url(#logoGrad)" opacity="0.12"/>
-            <path d="M 35 40 L 75 40 Q 85 40 85 50 L 85 75 Q 85 85 75 85 L 35 85 Q 25 85 25 75 L 25 50 Q 25 40 35 40" fill="none" stroke="url(#logoGrad)" stroke-width="3" stroke-linecap="round"/>
-            <path d="M 40 50 L 70 50" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-            <path d="M 40 62 L 65 62" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-            <path d="M 40 74 L 75 74" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
-            <circle cx="90" cy="55" r="12" fill="#4A7BA7" opacity="0.9"/>
-          </svg>
+          <img class="brand-logo" src="assets/zuntenium-logo.jpg" alt="Zuntenium logo" />
           <div>
-            <div style="font-weight: 900; font-size: 18px; letter-spacing: -0.5px; color: #1F2937;">ZUNTENIUM</div>
-            <div class="meta" style="font-size: 0.85rem; color: #6B7280;">Official Badge Generator</div>
+            <div class="brand-title">ZUNTENIUM</div>
+            <div class="meta">Official Badge Generator</div>
           </div>
         </div>
-        <div class="meta" style="font-size: 0.95rem; font-weight: 500; color: #374151;">🎖️ Create Your Official Contributor Badge</div>
-      </div>
+        <div class="meta">Create your official contributor badge</div>
+      </header>
 
       <div class="layout">
-        <section class="panel">
-          <div style="margin-bottom: 24px;">
-            <span class="section-title">🎭 Contributor role</span>
-            <div class="chip-grid">
-              <button class="chip active" data-role="developer">Developer</button>
-              <button class="chip" data-role="ai-engineer">AI Engineer</button>
-              <button class="chip" data-role="quantum-engineer">Quantum Engineer</button>
-              <button class="chip" data-role="researcher">Researcher</button>
-            </div>
+        <section class="panel" aria-label="Badge controls">
+          <div class="section">
+            <span class="section-title" id="roleLabel">Contributor role</span>
+            <div id="roleGrid" class="chip-grid" role="group" aria-labelledby="roleLabel"></div>
           </div>
 
-          <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06);">
-            <span class="section-title">📸 Profile photo</span>
-            <div id="dropzone" class="dropzone">
-              <div style="font-size: 2rem; margin-bottom: 8px;">📤</div>
-              <div style="font-size: 0.95rem; color: #4A7BA7; font-weight: 500;">Drop a photo here or click</div>
-              <div class="meta" style="font-size: 0.85rem; margin-top: 4px;">PNG or JPG, up to 8MB</div>
+          <div class="section">
+            <span class="section-title" id="photoLabel">Profile photo</span>
+            <div
+              id="dropzone"
+              class="dropzone"
+              role="button"
+              tabindex="0"
+              aria-labelledby="photoLabel"
+              aria-describedby="photoHint"
+            >
+              <div style="font-size: 1.6rem; margin-bottom: 6px;">📤</div>
+              <div>Drop a photo here or click to browse</div>
+              <div class="meta" id="photoHint" style="margin-top: 4px;">PNG or JPG, up to 8MB</div>
             </div>
-            <input id="fileInput" type="file" accept="image/*" style="display:none;" />
+            <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" class="sr-only" />
           </div>
 
-          <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06);">
-            <span class="section-title">✏️ Your information</span>
+          <div class="section">
+            <span class="section-title">Your information</span>
             <div style="margin-bottom: 12px;">
               <label class="label" for="nameInput">Full name</label>
-              <input id="nameInput" class="input" value="Amara Okafor" />
+              <input id="nameInput" class="input" autocomplete="name" />
             </div>
             <div style="margin-bottom: 12px;">
               <label class="label" for="countryInput">Country</label>
-              <input id="countryInput" class="input" value="Nigeria" />
+              <input id="countryInput" class="input" autocomplete="country-name" />
             </div>
             <div style="margin-bottom: 12px;">
               <label class="label" for="orgInput">Organization</label>
-              <input id="orgInput" class="input" value="Zuntenium Labs" />
+              <input id="orgInput" class="input" />
             </div>
-            <div style="margin-bottom: 12px;">
+            <div>
               <label class="label" for="githubInput">GitHub username</label>
-              <input id="githubInput" class="input" value="amaraokafor" />
+              <input id="githubInput" class="input" spellcheck="false" />
             </div>
           </div>
 
-          <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06);">
-            <span class="section-title">💬 Short quote</span>
-            <textarea id="quoteInput" class="textarea">Building Africa's Deep Tech Future.</textarea>
+          <div class="section">
+            <label class="section-title" for="quoteInput">Short quote</label>
+            <textarea id="quoteInput" class="textarea" maxlength="180"></textarea>
           </div>
 
-          <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06);">
-            <span class="section-title">🖼️ Format</span>
-            <div class="chip-grid">
-              <button class="layout-chip active" data-layout="square">Square</button>
-              <button class="layout-chip" data-layout="story">Story</button>
-              <button class="layout-chip" data-layout="linkedin">LinkedIn</button>
+          <div class="section">
+            <span class="section-title" id="layoutLabel">Format</span>
+            <div class="chip-grid layout-options" role="group" aria-labelledby="layoutLabel">
+              <button class="layout-chip" type="button" data-layout="square" aria-pressed="true">Square</button>
+              <button class="layout-chip" type="button" data-layout="story" aria-pressed="false">Story</button>
+              <button class="layout-chip" type="button" data-layout="linkedin" aria-pressed="false">LinkedIn</button>
             </div>
           </div>
 
-          <button id="downloadBtn" class="button" style="margin-bottom: 20px;">
-            ⬇️ Download PNG
-          </button>
+          <div class="section">
+            <div class="actions">
+              <button id="downloadBtn" class="button" type="button" aria-label="Download badge as PNG">Download PNG</button>
+              <button id="copyImageBtn" class="button secondary" type="button" aria-label="Copy badge image to clipboard">Copy image</button>
+            </div>
+            <div id="status" class="status" role="status" aria-live="polite"></div>
+          </div>
 
           <div>
-            <span class="section-title">📝 Suggested caption</span>
+            <label class="section-title" for="captionInput">Suggested caption</label>
             <textarea id="captionInput" class="textarea"></textarea>
-            <button id="copyBtn" class="button secondary" style="margin-top: 10px;">📋 Copy caption</button>
+            <button id="copyBtn" class="button secondary" type="button" style="margin-top: 10px;" aria-label="Copy suggested caption">Copy caption</button>
           </div>
         </section>
 
-        <section class="preview-panel">
-          <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #1F2937; font-size: 0.95rem;">
-            ✨ Live Preview
+        <section class="preview-panel" aria-label="Live badge preview">
+          <div style="font-weight: 600;">Live preview</div>
+          <div id="previewFrame" class="preview-frame" data-layout="square">
+            <canvas id="badgeCanvas" role="img" aria-label="Badge preview"></canvas>
           </div>
-          <canvas id="badgeCanvas"></canvas>
-          <div class="meta" id="contributorId" style="text-align: center; font-family: 'Courier New', monospace; font-weight: 600; color: #1E3A5F;">ID will appear here</div>
+          <div class="contributor-id" id="contributorId">ID will appear here</div>
         </section>
       </div>
     </div>
 
-    <script src="app.js"></script>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
