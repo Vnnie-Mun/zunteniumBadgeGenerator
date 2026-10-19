@@ -47,7 +47,7 @@ export const LAYOUTS = {
 export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
 export const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
 export const STORAGE_KEY = "zuntenium-badge-form";
-export const LOGO_SRC = "assets/zuntenium-logo.jpg";
+export const LOGO_SRC = "assets/zuntenium-logo.png";
 
 export const DEFAULTS = {
   roleId: "developer",

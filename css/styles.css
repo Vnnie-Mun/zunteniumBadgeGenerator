@@ -54,9 +54,11 @@ html, body {
 }
 
 .brand-mark {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
+  object-fit: contain;
+  mix-blend-mode: screen;
   filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.35));
 }
 

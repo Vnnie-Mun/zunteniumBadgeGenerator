@@ -366,9 +366,22 @@ export class BadgeCanvas {
     drawGoldCorner(ctx, w, h, scale);
   }
 
+  _drawLogoMark(ctx, x, y, size) {
+    if (!this.logo) {
+      drawZMonogram(ctx, x, y, size, C.gold);
+      return;
+    }
+    ctx.save();
+    ctx.shadowColor = hexToRgba(C.gold, 0.55);
+    ctx.shadowBlur = size * 0.18;
+    ctx.globalCompositeOperation = "screen";
+    ctx.drawImage(this.logo, x, y, size, size);
+    ctx.restore();
+  }
+
   _drawBrandLockup(ctx, x, y, scale, landscape) {
     const mark = (landscape ? 70 : 92) * scale;
-    drawZMonogram(ctx, x, y, mark, C.gold);
+    this._drawLogoMark(ctx, x, y, mark);
 
     const textX = x + mark + 18 * scale;
     const titleY = y + (landscape ? 10 : 14) * scale;
