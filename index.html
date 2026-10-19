@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Outfit:wght@500;700&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/styles.css" />
@@ -17,7 +17,20 @@
     <div class="app">
       <header class="topbar">
         <div class="brand">
-          <img class="brand-logo" src="assets/zuntenium-logo.jpg" alt="Zuntenium logo" />
+          <svg class="brand-mark" viewBox="0 0 64 64" role="img" aria-label="Zuntenium mark">
+            <defs>
+              <linearGradient id="goldMark" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#F3E2A8" />
+                <stop offset="50%" stop-color="#D4AF37" />
+                <stop offset="100%" stop-color="#8C6A1A" />
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="#050505" stroke="url(#goldMark)" stroke-width="2.2" />
+            <circle cx="32" cy="32" r="24" fill="none" stroke="#D4AF37" stroke-opacity="0.35" stroke-width="1" />
+            <ellipse cx="32" cy="32" rx="30" ry="11" fill="none" stroke="#F3E2A8" stroke-width="1.2" transform="rotate(-32 32 32)" />
+            <circle cx="58" cy="21" r="2.4" fill="url(#goldMark)" />
+            <path d="M19 22h26M45 22L19 42M19 42h26" fill="none" stroke="url(#goldMark)" stroke-width="5.2" />
+          </svg>
           <div>
             <div class="brand-title">ZUNTENIUM</div>
             <div class="meta">Official Badge Generator</div>
@@ -100,15 +113,17 @@
         </section>
 
         <section class="preview-panel" aria-label="Live badge preview">
-          <div style="font-weight: 600;">Live preview</div>
-          <div id="previewFrame" class="preview-frame" data-layout="square">
-            <canvas id="badgeCanvas" role="img" aria-label="Badge preview"></canvas>
+          <div class="preview-kicker">Live preview</div>
+          <div class="preview-stage">
+            <div id="previewFrame" class="preview-frame" data-layout="square">
+              <canvas id="badgeCanvas" role="img" aria-label="Badge preview"></canvas>
+            </div>
           </div>
           <div class="contributor-id" id="contributorId">ID will appear here</div>
         </section>
       </div>
     </div>
 
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/app.js?v=gold-preview"></script>
   </body>
 </html>
